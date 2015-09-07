@@ -30,7 +30,7 @@ case object Presenter extends Plugin with Websockets {
   }
 
   private def sendEvent(m: BespokeMessage): Boolean = {
-    sendBytes(Pickle.intoBytes(m))
+    send(Pickle.intoBytes(m))
     true
   }
 }

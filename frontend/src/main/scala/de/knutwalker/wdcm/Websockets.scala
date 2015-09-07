@@ -35,11 +35,9 @@ trait Websockets {
     ws
   }
 
-  final def sendBytes(bb: ByteBuffer) =
     ws.filter(_.readyState == WebSocket.OPEN).foreach(_.send(bb.arrayBuffer()))
 
-  final def send(msg: String): Unit =
-    ws.filter(_.readyState == WebSocket.OPEN).foreach(_.send(msg))
+  final def send(bb: ByteBuffer) = {
 
   protected final def registerUnbind(f: js.Function0[Unit]): Unit = {
     val before = _unbind
