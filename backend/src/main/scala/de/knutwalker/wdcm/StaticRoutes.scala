@@ -21,6 +21,20 @@ trait StaticRoutes extends Directives {
         }
       }
     } ~
+    path("wdcm-frontend-jsdeps.js") {
+      get {
+        if (appSettings.fullOpt) {
+          getFromResource("wdcm-frontend-jsdeps.min.js")
+        } else {
+          getFromResource("wdcm-frontend-jsdeps.js")
+        }
+      }
+    } ~
+    path("webjars" / Segments) { path ⇒
+      get {
+        getFromResource(s"META-INF/resources/webjars/${path.mkString("/")}")
+      }
+    } ~
     path("js" / raw"(.+)\.js".r) { file ⇒
       get {
         if (appSettings.fullOpt) {

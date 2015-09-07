@@ -7,20 +7,23 @@ lazy val frontend = project enablePlugins ScalaJSPlugin  disablePlugins Assembly
     "org.scala-js" %%% "scalajs-dom" % "0.8.1",
     "com.lihaoyi"  %%% "utest"       % "0.3.1" % "test"
   ),
+  // can use webjars for js dependencies (bower on JVM)
+  jsDependencies += "org.webjars" % "toastr" % "2.1.1" / "2.1.1/toastr.js",
+  // and pull dom from phantom-js for tests
+  jsDependencies in Test += RuntimeDOM,
   testFrameworks += new TestFramework("utest.runner.Framework"),
   // auto-detect main and create launcher
   persistLauncher in Compile := true,
   persistLauncher in Test := false,
   // Use node instead of Rhino
   scalaJSStage in Global := FastOptStage,
-  // and pull dom from phantom-js for tests
-  jsDependencies += RuntimeDOM,
   // build fat-js, package deps
   skip in packageJSDependencies := false
 )
 
 lazy val backend = project dependsOn common settings (
   libraryDependencies ++= List(
+    "org.webjars"        % "toastr"                 % "2.1.1",
     "com.typesafe.akka" %% "akka-http-experimental" % "1.0",
     "de.knutwalker"     %% "typed-actors"           % "1.1.0"
   ),
