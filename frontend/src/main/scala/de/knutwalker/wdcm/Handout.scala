@@ -38,6 +38,10 @@ case object Handout extends Plugin with Websockets {
         case BespokeMessage.Activate(n) if n != active ⇒
           max = js.Math.max(n, max)
           deck.slide(n)
+        case BespokeMessage.Connect                    ⇒
+          max = 0
+          active = 0
+          deck.slide(0)
         case otherwise                                 ⇒
       }
     }

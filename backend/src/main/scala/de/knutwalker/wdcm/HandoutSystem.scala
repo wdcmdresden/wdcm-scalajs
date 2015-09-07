@@ -59,7 +59,10 @@ object HandoutSystem {
       case m@BespokeMessage.Deactivate(n) ⇒
         sequence :+= m
         viewers.foreach(_ ! m)
-      case BespokeMessage.Disconnect ⇒
+      case BespokeMessage.Connect         ⇒
+        sequence = Vector(BespokeMessage.Connect)
+        viewers.foreach(_ ! BespokeMessage.Connect)
+      case BespokeMessage.Disconnect      ⇒
         sequence = Vector()
         viewers.foreach(_ ! BespokeMessage.Disconnect)
     }

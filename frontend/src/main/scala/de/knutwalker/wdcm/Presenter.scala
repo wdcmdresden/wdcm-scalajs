@@ -7,10 +7,17 @@ import boopickle.Default.Pickle
 
 case object Presenter extends Plugin with Websockets {
 
+  override protected def onOpen(ws: WebSocket, event: Event): Unit =
+    sendEvent(BespokeMessage.connect)
+
   override protected def onClose(ws: WebSocket, event: Event): Unit =
     sendEvent(BespokeMessage.disconnect)
 
   override def apply(deck: Deck): Unit = {
+    // Need to register before opening, otherwise we lose the race for handling
+    // 'next' and 'prev' against the bullet plugin, which swallows next events
+    // in order to open its bullets, but we could not inform the handout clients
+    // to jump to their next bullet item as well.
     registerUnbind(deck.on("activate", (e: BespokeEvent) ⇒ {
       sendEvent(BespokeMessage.activate(e.index))
     }))
