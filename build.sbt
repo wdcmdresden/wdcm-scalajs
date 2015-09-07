@@ -31,7 +31,11 @@ lazy val backend = project dependsOn common settings (
     fastOptJS in Compile in frontend,
     packageScalaJSLauncher in Compile in frontend,
     packageJSDependencies in Compile in frontend
-  ).map((f1, f2, f3) ⇒ Seq(f1.data, f2.data, f3)),
+  ).map((f1, f2, f3) ⇒ Seq(
+    f1.data, f2.data, f3,
+    f1.data.toPath.resolveSibling(f1.data.getName + ".map").toFile,
+    f3.toPath.resolveSibling(f3.getName + ".map").toFile
+  )),
   watchSources <++= (watchSources in frontend),
   Revolver.settings,
 
@@ -39,10 +43,14 @@ lazy val backend = project dependsOn common settings (
   (assembledMappings in assembly) <+= (
     fullOptJS in Compile in frontend,
     packageMinifiedJSDependencies in Compile in frontend
-  ).map((f1, f2) ⇒ sbtassembly.MappingSet(None, Vector(
-    (f1.data, f1.data.getName),
-    (f2, f2.getName)
-  ))),
+  ).map((f1, f2) ⇒ {
+    val sourceMap = f1.data.toPath.resolveSibling(f1.data.getName + ".map").toFile
+    sbtassembly.MappingSet(None, Vector(
+      (f1.data, f1.data.getName),
+      (sourceMap, sourceMap.getName),
+      (f2, f2.getName)
+    ))
+  }),
   assemblyJarName in assembly := s"${name.value}",
   assemblyOutputPath in assembly := baseDirectory.value / ".." / (assemblyJarName in assembly).value,
   assemblyOption in assembly ~= (_.copy(prependShellScript = Some(Seq("#!/usr/bin/env sh", """exec java -Xms256m -Xmx256m -client -Dapp.use-full-opt=true -Dakka.actor.debug.receive=off -Dakka.loglevel=INFO -jar "$0" "$@"""")))),
