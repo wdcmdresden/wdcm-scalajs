@@ -33,13 +33,11 @@ case object Handout extends Plugin with Websockets {
       val data = TypedArrayBuffer.wrap(wsMsg.data.asInstanceOf[ArrayBuffer])
       val message = unpickler.fromBytes(data)
       message match {
-        case BespokeMessage.Next(n)                    ⇒
+        case BespokeMessage.Next(n) if n == active ⇒
           max = js.Math.max(n, max)
-          if (n != active) deck.slide(n)
           deck.next()
-        case BespokeMessage.Prev(n)                    ⇒
+        case BespokeMessage.Prev(n) if n == active ⇒
           max = js.Math.max(n, max)
-          if (n != active) deck.slide(n)
           deck.prev()
         case BespokeMessage.Slide(n) if n != active    ⇒
           max = js.Math.max(n, max)
