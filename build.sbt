@@ -29,14 +29,23 @@ lazy val backend = project dependsOn common settings (
   ),
   (resourceGenerators in Compile) <+= (
     fastOptJS in Compile in frontend,
-    packageScalaJSLauncher in Compile in frontend
-  ).map((f1, f2) ⇒ List(f1.data, f2.data)),
+    packageScalaJSLauncher in Compile in frontend,
+    packageJSDependencies in Compile in frontend
+  ).map((f1, f2, f3) ⇒ Seq(f1.data, f2.data, f3)),
   watchSources <++= (watchSources in frontend),
   Revolver.settings,
-  (assembledMappings in assembly) <+= (fullOptJS in Compile in frontend).map(f ⇒ sbtassembly.MappingSet(None, Vector((f.data, f.data.getName)))),
+
+  // assembly file settings
+  (assembledMappings in assembly) <+= (
+    fullOptJS in Compile in frontend,
+    packageMinifiedJSDependencies in Compile in frontend
+  ).map((f1, f2) ⇒ sbtassembly.MappingSet(None, Vector(
+    (f1.data, f1.data.getName),
+    (f2, f2.getName)
+  ))),
   assemblyJarName in assembly := s"${name.value}",
   assemblyOutputPath in assembly := baseDirectory.value / ".." / (assemblyJarName in assembly).value,
-  assemblyOption in assembly ~= (_.copy(prependShellScript = Some(Seq("#!/usr/bin/env sh", """exec java -Xms256m -Xmx256m -client -Dapp.use-full-opt=true -jar "$0" "$@"""")))),
+  assemblyOption in assembly ~= (_.copy(prependShellScript = Some(Seq("#!/usr/bin/env sh", """exec java -Xms256m -Xmx256m -client -Dapp.use-full-opt=true -Dakka.actor.debug.receive=off -Dakka.loglevel=INFO -jar "$0" "$@"""")))),
   assemblyMergeStrategy in assembly := {
     case "JS_DEPENDENCIES" ⇒ MergeStrategy.concat
     case x                 ⇒ (assemblyMergeStrategy in assembly).value.apply(x)
