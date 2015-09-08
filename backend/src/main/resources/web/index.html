@@ -8,59 +8,178 @@
     <link rel="stylesheet" type="text/css" href="webjars/toastr/2.1.1/toastr.css">
   </head>
   <body>
-    <article>
-      <section>
-        <h1>Scala.js</h1>
-      </section>
-      <section>
-        <h2>Keyboard Interaction</h2>
-        <h3>Powered by <a href="https://github.com/markdalgleish/bespoke-keys">bespoke-keys</a></h3>
-      </section>
-      <section>
-        <h2>Touch Interaction</h2>
-        <h3>Powered by <a href="https://github.com/markdalgleish/bespoke-touch">bespoke-touch</a></h3>
-      </section>
-      <section>
-        <h2>Responsive Slides</h2>
-        <h3>Powered by <a href="https://github.com/markdalgleish/bespoke-scale">bespoke-scale</a></h3>
-      </section>
-      <section>
-        <h2>Bullet List</h2>
-        <h3 class="bullet">Powered by <a href="https://github.com/markdalgleish/bespoke-bullets">bespoke-bullets</a></h3>
-        <ul>
-          <li>Bullet 1</li>
-          <li>Bullet 2</li>
-          <li>Bullet 3</li>
-        </ul>
-      </section>
-      <section>
-        <h2>Syntax Highlighting</h2>
-        <h3>Powered by <a href="http://twitter.com/LeaVerou">Lea Verou</a>'s <a href="https://github.com/LeaVerou/prism">Prism</a></h3>
-        <pre><code class="language-javascript">bespoke.from('article', [
-  classes(),
-  keys(),
-  touch(),
-  bullets('li, .bullet')
-]);
-</code></pre>
-      </section>
-      <section data-bespoke-hash="named-route">
-        <h2>Named Route</h2>
-        <h3>Powered by <a href="https://github.com/markdalgleish/bespoke-hash">bespoke-hash</a></h3>
-        <p>Look up! This route has been named with a <em>'data-bespoke-hash'</em> attribute.</p>
-      </section>
-      <section>
-        <h2 class="bullet">Just the beginning...</h2><br>
-        <ul>
-          <li>Edit <a href="http://jade-lang.com/">Jade</a> markup in <em>'src/index.jade'</em></li>
-          <li>Edit <a href="http://learnboost.github.io/stylus/">Stylus</a> styles in <em>'src/styles/main.styl'</em></li>
-          <li>Edit JavaScript in <em>'src/scripts/main.js'</em></li>
-        </ul><br>
-        <ul>
-          <li><strong>Enjoy! :)</strong><a href="http://twitter.com/markdalgleish"> -@markdalgleish</a></li>
-        </ul>
-      </section>
-    </article>
+
+<article>
+  <section>
+    <h1>Scala.js</h1>
+  </section>
+
+  <section>
+    <h2>Who am I?</h2>
+    <ul>
+      <li><a href="https://github.com/knutwalker">@knutwalker</a></li>
+      <li>Works <a href="http://avantgardelabs.de">@avantgardelabs</a></li>
+      <li>Scala and JS dev for some years</li>
+      <li>Just started with Scala.js</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>What is Scala.js?</h2>
+    <h4>Basically, Scala-to-JS compiler</h4>
+  </section>
+
+  <section>
+    <img src="img/big-picture.png" alt="big picture">
+  </section>
+
+  <section>
+    <h2>Why?</h2>
+    <ul>
+      <li>Share code between client and server</li>
+      <li>Strong typing, including for JavaScript libraries</li>
+      <li>Tooling: IDE support, Scala std-lib, ...</li>
+      <li>Fast compilation cycle (compared to other JVM-JS such as GWT)</li>
+      <li>Great community, good documentation</li>
+    </ul>
+    <span>according to <a href="https://groups.google.com/forum/#!topic/scala-js/_1Sfb5Nj08w"> this thread</a></span>
+  </section>
+
+  <section>
+    <h2>Wait, types?</h2>
+    <ul>
+      <li>Microsoft: Typescript</li>
+      <li>Google: Dart &amp; AtScript; Closure</li>
+      <li>Facebook: Flow</li>
+      <li>Mozilla: asm.js</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Safety</h2>
+    <pre><code>undefined is not a function</code></pre>
+  </section>
+
+  <section>
+    <h2>Share code, same language</h2>
+    <pre style="font-size:0.8em"><code>
+# This code is also in this server code.
+# Please keep them both in sync if you need to change something!
+    </code></pre>
+  </section>
+
+  <section>
+    <h2>"isomorphic"</h2>
+    <p>
+    <blockquote class="twitter-tweet" lang="en"><p lang="en" dir="ltr">My shoes are isomorphic.&#10;&#10;They can be used for running, both inside and outside.</p>&mdash; Tony Morris (@dibblego) <a href="https://twitter.com/dibblego/status/615711609424482304">June 30, 2015</a></blockquote>
+  </section>
+
+  <section>
+    <h2>Warts</h2>
+    <pre><code class="language-javascript">
+> ["10", "10", "10", "10"].map(parseInt)
+[ 10, NaN, 2, 3 ]
+> ["10", "11", "12", "13"].map(parseInt)
+[ 10, NaN, 1, 1 ]
+    </code></pre>
+  </section>
+
+  <section>
+    <h2>How?</h2>
+    <ul>
+      <li>compiles scala AST to .class and .sjsir</li>
+      <li>does <em>not</em> compile .class to .sjsir</li>
+      <li>compiles .sjsir to JS, optionally optimizing with advanced Closure</li>
+      <li>produces single JS file</li>
+    </ul>
+  </section>
+
+  <section>
+    <img src="img/js-pipeline.png" alt="pipeline">
+  </section>
+
+  <section>
+    <h2>More how</h2>
+    <pre><code class="language-scala">addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.5")</code></pre>
+  </section>
+
+  <section>
+    <h2>More how</h2>
+    <pre><code class="language-scala">enablePlugins(ScalaJSPlugin)</code></pre>
+  </section>
+
+  <section>
+    <h2>More how</h2>
+    <pre><code class="language-scala">package tutorial.webapp
+import scala.scalajs.js.JSApp
+
+object TutorialApp extends JSApp {
+  def main(): Unit = {
+    println("Hello world!")
+  }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>More how</h2>
+    <pre style="font-size:0.6em"><code class="language-javascript">$c_Ltutorial_webapp_TutorialApp$.prototype.$$js$exported$meth$main__O = (function() {
+  var this$2 = $m_s_Console$();
+  var this$3 = this$2.outVar$2;
+  $as_Ljava_io_PrintStream(this$3.tl$1.get__O()).println__O__V("Hello world!")
+});</code></pre>
+  </section>
+
+  <section>
+    <h2>Interop?</h2>
+    <ul>
+      <li>Call JS from Scala</li>
+      <li>Call Scala from JS</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Libraries</h2>
+    <ul>
+      <li>facades (<a href="https://github.com/scala-js/scala-js-jquery">jQuery</a>,
+      <a href="https://github.com/greencatsoft/scalajs-angular">Angular</a>,
+      <a href="https://github.com/japgolly/scalajs-react">React</a>)</li>
+      <li>JVM/Scala cross compiled (scalaz, shapeless)</li>
+    <ul>
+  </section>
+
+  <section>
+    <h2>New libraries</h2>
+    <ul>
+      <li>scalatags: typed html</li>
+      <li>scalacss: typed css</li>
+      <li>autowire: typed ajax</li>
+    <ul>
+  </section>
+
+  <section>
+    <h1>Code</h1>
+  </section>
+
+  <section>
+    <h2>Downsides</h2>
+    <ul>
+      <li>debugging (same as *-to-js)</li>
+      <li>has source-maps though</li>
+      <li>big-ish result (100s of K)</li>
+      <li>ok for app, not so much for libs</li>
+      <li>NIH: difficult to draw from JS ecosystem (npm, bower support?)</li>
+      <li>workflow from dev to prod not as streamlined as a good gulp/grunt one</li>
+    </ul>
+  </section>
+
+  <section>
+    <h1>Thanks</h1>
+    <h2></h2>
+    <h2>???</h2>
+  </section>
+
+</article>
+
     <script type="text/javascript" src="js/prism.js"></script>
     <script type="text/javascript" src="js/bespoke.js"></script>
     <script type="text/javascript" src="js/bespoke-bullets.js"></script>
@@ -71,6 +190,7 @@
     <script type="text/javascript" src="js/bespoke-theme-voltaire.js"></script>
     <script type="text/javascript" src="js/bespoke-touch.js"></script>
     <script type="text/javascript" src="webjars/jquery/1.9.1/jquery.min.js"></script>
+    <script async src="http://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <script type="text/javascript" src="wdcm-frontend-jsdeps.js"></script>
     <script type="text/javascript" src="wdcm-frontend-fastopt.js"></script>
     <script type="text/javascript" src="wdcm-frontend-launcher.js"></script>
